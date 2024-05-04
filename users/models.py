@@ -6,6 +6,7 @@ NULLABLE = {'null': True, 'blank': True}
 
 
 class User(AbstractUser):
+    """Модель пользователя."""
     username = None
     first_name = models.CharField(max_length=100, verbose_name='имя')
     last_name = models.CharField(max_length=100, verbose_name='фамилия')
@@ -23,6 +24,7 @@ class User(AbstractUser):
     email_confirmation_token = models.CharField(max_length=64, blank=True, null=True)
 
     def save(self, *args, **kwargs):
+        """Создание токена для подтверждения почты."""
         if not self.email_confirmation_token:
             self.email_confirmation_token = default_token_generator.make_token(self)
         super().save(*args, **kwargs)

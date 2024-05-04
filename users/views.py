@@ -9,39 +9,41 @@ from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, UpdateView
 from django.contrib import messages
-
 from users.forms import UserRegisterForm, UserProfileForm
-
 from users.models import User
 from users.services import send_new_password
 
 
 class LoginView(BaseLoginView):
+    """Страница входа"""
     template_name = 'users/login.html'
 
 
 def logout_view(request):
+    """Страница выхода"""
     logout(request)
     return redirect(reverse_lazy('users:login'))
 
 
 class RegisterView(CreateView):
+    """Страница регистрации"""
     model = User
     form_class = UserRegisterForm
     template_name = 'users/register.html'
     success_url = reverse_lazy('users:login')
 
     def form_valid(self, form):
+        """Сохраняем нового пользователя"""
         new_user = form.save(commit=False)
-        new_user.is_active = False  # Устанавливаем флаг активности пользователя как False
+        new_user.is_active = False
         new_user.save()
 
-        # Создание токена для подтверждения регистрации
+        """Отправляем письмо с подтверждением регистрации"""
         token = default_token_generator.make_token(new_user)
-        new_user.email_confirmation_token = token  # Сохраняем токен в поле модели
-        new_user.save()  # Сохраняем изменения в базе данных
+        new_user.email_confirmation_token = token
+        new_user.save()
 
-        # Создание ссылки подтверждения регистрации
+        # Генерация URL для подтверждения регистрации
         confirmation_url = self.request.build_absolute_uri(
             reverse('users:confirm_registration', kwargs={'token': token}))
 
@@ -65,7 +67,7 @@ class RegisterView(CreateView):
 
 
 def confirm_registration(request, token):
-    print(token)  # Добавляем отладочную информацию для проверки полученного токена
+    """Страница подтверждения регистрации"""
     try:
         user = User.objects.get(email_confirmation_token=token)
         # Проверяем токен
@@ -84,10 +86,12 @@ def confirm_registration(request, token):
 
 
 def invalid_token_view(request):
+    """Страница недействительного токена"""
     return render(request, 'users/invalid_token.html')
 
 
 class ProfileView(LoginRequiredMixin, UpdateView):
+    """Страница профиля"""
     model = User
     form_class = UserProfileForm
     success_url = reverse_lazy('users:profile')
@@ -97,6 +101,7 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
 
 def generate_new_password(request):
+    """Страница генерации пароля"""
     new_password = User.objects.make_random_password()
     request.user.set_password(new_password)
     request.user.save()
@@ -105,6 +110,7 @@ def generate_new_password(request):
 
 
 def reset_password(request):
+    """Страница смены пароля"""
     if request.method == 'POST':
         email = request.POST.get('email')
         try:

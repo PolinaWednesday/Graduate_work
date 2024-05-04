@@ -23,36 +23,42 @@
 </style>
 
 <div class="col-12 mb-5">
-    <a class="btn btn-info" href="{% url 'service_create' %}">Добавить услугу</a>
+    {% if user.is_staff or user.is_superuser %}
+    <a class="btn btn-sm btn-info" href="{% url 'medical_services:service_create' %}">Добавить услугу</a>
+    {% endif %}
 </div>
 {% for object in object_list %}
 <div class="col-md-12">
     <div class="card mb-4 box-shadow">
         <div class="card-body">
-            <p class="card-text">
-                Категория: {{ object.category | slice:":100" }}
-            </p>
 
+            <p class="card-text">
+                <b>Название:</b> {{ object.services_title | slice:":100" }}
+            </p>
             <div class="card-text">
                 <p class="card-text">
-                Название: {{ object.services_title | slice:":100" }}
+                    <b>Категория:</b> {{ object.category | slice:":100" }}
                 </p>
                 <p>
-                    Описание: {{ object.services_description | slice:":100" }}
+                    <b>Описание:</b> {{ object.services_description | slice:":100" }}
                 </p>
                 <p>
-                    Цена: {{ object.price | slice:":100" }} рублей
+                    <b>Цена:</b> {{ object.price | slice:":100" }} рублей
                 </p>
                 <p>
-                    Срок выполнения: {{ object.deadline| slice:":100" }}
+                    <b>Срок выполнения:</b> {{ object.deadline| slice:":100" }}
                 </p>
             </div>
             <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                     <form>
-                        <a href="{% url 'service_detail' object.pk %}" class="btn btn-sm btn-info">Посмотреть</a>
-                        <a href="{% url 'service_update' object.pk %}" class="btn btn-sm btn-info">Изменить</a>
-                        <a href="{% url 'service_delete' object.pk %}" class="btn btn-sm btn-danger">Удалить</a>
+
+                        <a href="{% url 'medical_services:service_detail' object.pk %}" class="btn btn-sm btn-info">Посмотреть</a>
+
+                        {% if user.is_staff or user.is_superuser %}
+                        <a href="{% url 'medical_services:service_update' object.pk %}" class="btn btn-sm btn-info">Изменить</a>
+                        <a href="{% url 'medical_services:service_delete' object.pk %}" class="btn btn-sm btn-danger">Удалить</a>
+                        {% endif %}
                     </form>
                 </div>
                 <small class="text-muted"></small>
