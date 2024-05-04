@@ -1,5 +1,5 @@
 from django import forms
-from medical_services.models import Service, Category, Cart
+from medical_services.models import Service, Category
 
 
 class CategoryForm(forms.ModelForm):

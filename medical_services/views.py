@@ -1,6 +1,5 @@
 import json
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
@@ -213,8 +212,6 @@ class ContactView(View):
             return render(request, 'medical_services/contacts_success.html', context)
 
 
-
-
 class ServiceCartView(View):
     """ Корзина """
     model = Cart
@@ -282,6 +279,7 @@ class ServiceCartView(View):
 
 class AddToCartView(View):
     """ Добавление услуги в корзину """
+
     def post(self, request, pk):
         json_data = json.loads(request.body)
         service_id = json_data.get('service_id')
