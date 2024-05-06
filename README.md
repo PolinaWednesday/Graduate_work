@@ -30,8 +30,9 @@
 
 ### В проекте выгружены следующие фикстуры:
 - `data.json` - данные для создания категорий и медицинских услуг. Находится в папке `medical_services/fixtures`.
+Для загрузки данных fixtures воспользуйтесь командой `python manage.py loaddata data.json`
 - `groups.json` - данные для создания функционала группы модераторов. Находится в папке `users/fixtures`.
-Для загрузки данных fixtures воспользуйтесь командой `python manage.py loaddata название_файла.json`
+Для загрузки данных fixtures воспользуйтесь командой `python manage.py loaddata groups.json`
 
 ### `CSU` - команда создания пользователя
 Для создания пользователя можно использовать файл `csu.py`, находящийся в папке `users/management/commands`.
