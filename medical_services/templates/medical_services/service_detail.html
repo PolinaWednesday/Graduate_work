@@ -25,7 +25,10 @@
                     <form id="addToCartForm" data-service-id="{{ object.id }}">
                         {% csrf_token %}
                         <input type="button" class="btn btn-sm btn-info" value="Назад" onclick="history.back()">
+                        {% if user.is_authenticated %}
                         <button type="button" class="btn btn-sm btn-success" id="buyButton">Купить</button>
+                        <a class="btn btn-sm btn-dark" href="{% url 'medical_services:service_cart' %}">Корзина</a>
+                        {% endif %}
                     </form>
                 </div>
                 <small id="messageBox" class="text-muted"></small>

@@ -28,7 +28,9 @@
                     <form method="post" action="{% url 'medical_services:remove_service' service.id %}">
                         {% csrf_token %}
                         <input type="hidden" name="service_id" value="{{ service.id }}">
-                        <button type="submit" class="btn btn-link text-danger">Удалить</button>
+                        <button type="submit" class="btn btn-link text-danger">
+                            <img src="/media/image.png" alt="корзина" width="20" height="20"/>
+                        </button>
                     </form>
                 </li>
                 {% endfor %}
